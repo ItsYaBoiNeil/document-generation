@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Word</title>
+</head>
+<body>
+    <h1>Random Word: {{ word }}</h1>
+    <form method="post">
+        {% csrf_token %}
+    <button type="submit">Generate PDF</button>
+    </form>
+</body>
+</html>
