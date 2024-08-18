@@ -9,16 +9,20 @@ from reportlab.lib import colors
 from django.conf import settings
 
 def api(request):
-    response = requests.get('https://random-word-api.herokuapp.com/word')
-    if response.status_code == 200:
-        word = response.json()[0]
+    if request.method == 'GET':
+        response = requests.get('https://random-word-api.herokuapp.com/word')
+        if response.status_code == 200:
+            word = response.json()[0]
+        else:
+            word = "Error fetching word"
+        request.session['random_word'] = word
     else:
-        word = "Error fetching word"
+        word = request.session.get('random_word', 'Error fetching word')
     
     if request.method == 'POST':
         return string2pdf(word)
     
-    return render(request,"templates/home.html",{"word":word})
+    return render(request, "home.html", {"word": word})
 
 
 def index(request):
@@ -40,11 +44,11 @@ def string2pdf(string):
     )
 
     pdf.setFont('abc', 36) 
-    pdf.drawCentredString(300, 770, "RAAND-AI")
+    pdf.drawCentredString(300, 770, "iPAM")
 
     pdf.setFillColorRGB(0, 0, 0) 
     pdf.setFont("Courier-Bold", 24) 
-    pdf.drawCentredString(290, 720, "Innovation Unbound") 
+    pdf.drawCentredString(290, 720, "BE Project") 
 
     pdf.line(30, 710, 550, 710) 
 
