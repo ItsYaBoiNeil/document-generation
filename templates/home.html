@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html>
 <html>
 <head>
     <title>Random Word</title>
@@ -10,4 +10,22 @@
     <button type="submit">Generate PDF</button>
     </form>
 </body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM Response PDF Generator</title>
+</head>
+<body>
+    <h1>LLM Response</h1>
+    <p>{{ word }}</p>  <!-- This displays the LLM response -->
+
+    <!-- Button to download the response as a PDF -->
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Download PDF</button>
+    </form>
+</body>
 </html>
+
