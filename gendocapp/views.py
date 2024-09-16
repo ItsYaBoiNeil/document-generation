@@ -87,28 +87,75 @@ def home(request):
 
 
 # Fetch data from Mistral LLM
+# def fetch_llm_response():
+#     api_key = os.environ.get("MISTRAL_API_KEY")
+#     if not api_key:
+#         return "API key not found. Set the environment variable 'MISTRAL_API_KEY'."
+    
+#     model = "mistral-small-latest"
+#     client = Mistral(api_key=api_key)
+    
+#     try:
+#         # Making a request to Mistral LLM to get the planets of our solar system
+#         chat_response = client.chat.complete(
+#             model=model,
+#             messages=[
+#                 {
+#                     "role": "user",
+#                     "content": "Name the planets of our solar system",
+#                 },
+#             ]
+#         )
+#         return chat_response.choices[0].message.content
+#     except Exception as e:
+#         return f"Error fetching LLM response: {e}"
+
+#New api request function:
 def fetch_llm_response():
-    api_key = os.environ.get("MISTRAL_API_KEY")
+    # api_key = os.environ.get("MISTRAL_API_KEY")
+    api_key = '' 
     if not api_key:
         return "API key not found. Set the environment variable 'MISTRAL_API_KEY'."
-    
-    model = "mistral-large-latest"
-    client = Mistral(api_key=api_key)
-    
+
+    # API endpoint
+    url = "https://api.mistral.ai/v1/chat/completions"
+
+    # Headers with Bearer token
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
+    # Payload for the API request
+    payload = {
+        "model": "mistral-small-latest",
+        "messages": [
+            {
+                "role": "user",
+                "content": "Give an overview of engineering colleges in Mumbai and a ranking"
+            }
+        ]
+    }
+
     try:
-        # Making a request to Mistral LLM to get the planets of our solar system
-        chat_response = client.chat.complete(
-            model=model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": "Name the planets of our solar system",
-                },
-            ]
-        )
-        return chat_response.choices[0].message.content
+        # Make the request to the Mistral API
+        response = requests.post(url, json=payload, headers=headers)
+        response_data = response.json()
+
+        # Handle unauthorized or other errors
+        if response.status_code == 401:
+            return f"Error: Unauthorized. Check your API key."
+        elif response.status_code != 200:
+            return f"Error: {response_data.get('message', 'Unknown error')}"
+
+        # Get the response content
+        return response_data['choices'][0]['message']['content']
+    
     except Exception as e:
         return f"Error fetching LLM response: {e}"
+
+
+
 
 # Django view to fetch and show the response from Mistral LLM
 def api(request):
