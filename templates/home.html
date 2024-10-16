@@ -11,8 +11,10 @@
     </form>
 </body>
 </html> {% endcomment %}
+{% comment %} --------------------------------------------------------------------------------------- {% endcomment %}
 
-<!DOCTYPE html>
+
+{% comment %} <!DOCTYPE html>
 <html>
 <head>
     <title>LLM Response PDF Generator</title>
@@ -27,5 +29,37 @@
         <button type="submit">Download PDF</button>
     </form>
 </body>
+</html> {% endcomment %}
+{% comment %} -------------------------------------------------------------------------------------------------------------- {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Request Form</title>
+</head>
+<body>
+    <h1>Ask a Question</h1>
+    <form method="POST" action="{% url 'process_question' %}">
+        {% csrf_token %}
+        <label for="question">Your Question:</label>
+        <input type="text" id="question" name="question" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>API Response:</h2>
+    <p>{{ api_response }}</p>
+
+    {% if api_response %}
+    <form method="POST" action="{% url 'download_pdf' %}">
+        {% csrf_token %}
+        <input type="hidden" name="api_response" value="{{ api_response }}">
+        <button type="submit">Download PDF</button>
+    </form>
+    {% endif %}
+</body>
 </html>
+
 
