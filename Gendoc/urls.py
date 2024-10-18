@@ -20,6 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('gendocapp.urls')),
-    path('', include('gendocapp.urls')), # Include the URLs from your app
+    path('', include('gendocapp.urls')),
+     path('codegeneration/', include('codegeneration.urls')),
 ]
 
