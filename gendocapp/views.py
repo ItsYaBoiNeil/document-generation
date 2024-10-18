@@ -77,7 +77,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics 
 from reportlab.lib import colors
 from django.conf import settings
-from mistralai import Mistral
+
 import textwrap
 
 from django.shortcuts import render
@@ -233,16 +233,17 @@ def home(request):
 def process_question(request):
     if request.method == 'POST':
         question = request.POST['question']
+        print(type(question))
 
         # Use Hugging Face InferenceClient to get the API response
-        client = InferenceClient(api_key=ASTON_CASHLATINO)
+        client = InferenceClient(api_key="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")
         api_response = ""
 
         for message in client.chat_completion(
             model="mistralai/Mistral-7B-Instruct-v0.3",
             messages=[{"role": "user", "content": question}],
             max_tokens=500,
-            stream=True,
+            stream=False,
         ):
             api_response += message.choices[0].delta.content
 
